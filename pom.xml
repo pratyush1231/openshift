@@ -1,0 +1,730 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>gov.epa.cdx.ods.II</groupId>
+    <artifactId>cdx-ods-II</artifactId>
+    <packaging>war</packaging>
+    <version>0.5-SNAPSHOT</version>
+    <name>CDX ODS (CBI) Dataflow</name>
+    <url>http://cvsprime.gotdns.com/maven2-sites/cdx-ods-II</url>
+    <scm>
+        <developerConnection>scm:git:ssh://git@alm.cgifederal.com/epacdx/cdx-ods-ii.git</developerConnection>
+        <connection>scm:git:ssh://git@alm.cgifederal.com/epacdx/cdx-ods-ii.git</connection>
+        <url>https://alm.cgifederal.com/scm/projects/EPACDX/repos/cdx-ods-ii/browse</url>
+    </scm>
+    <!-- 
+    <distributionManagement>
+        <site>
+            <id>cvsprime.gotdns.com</id>
+            <url>scp://cvsprime.gotdns.com/data/maven-sites/cdx-ods-II</url>
+        </site>
+        <repository>
+            <id>cvsprime.gotdns.com</id>
+            <name>cdxmaven2repo</name>
+            <url>scp://cvsprime.gotdns.com/data/maven2</url>
+        </repository>
+    </distributionManagement>
+    -->
+    <distributionManagement>      
+        <repository>
+            <id>cvsprime.gotdns.com</id>
+            <name>cdxmaven2repo</name>
+            <url>file:///F:/data/maven2</url>
+        </repository>
+    </distributionManagement>    
+    <organization>
+        <name>Central Data Exchange</name>
+        <url>http://www.epa.gov/cdx/</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>ddundua</id>
+            <name>David Dundua</name>
+            <email>david.dundua@cgifederal.com</email>
+            <organization>CGI Federal</organization>
+            <organizationUrl>www.cgifederal.com</organizationUrl>
+            <roles>
+                <role>coder</role>
+                <role>funkmaster</role>
+            </roles>
+            <timezone>-5</timezone>
+        </developer>
+    </developers>
+    <!-- ====================================================================== -->
+    <!--                             version aliases                            -->
+    <!-- ====================================================================== -->
+    <properties>
+        <ngn.version>4.0.4</ngn.version>
+        <cromerr.version>4.0.1</cromerr.version>
+        <ngn.webcdx.version>4.0.9</ngn.webcdx.version>
+        <jasypt.version>2.0.0</jasypt.version>
+        <jersey.version>2.21</jersey.version>
+        <jackson.version>2.5.4</jackson.version>
+        <additionalparam>-Xdoclint:none</additionalparam>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>4.0.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>4.1.6.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>gov.epa.cdx.tools</groupId>
+                <artifactId>spring-rmi-compatibility</artifactId>
+                <version>2.5.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.8.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <!-- ====================================================================== -->
+        <!--                              Spring                                    -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.cdx.tools</groupId>
+            <artifactId>spring-rmi-compatibility</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                      JDBC Drivers for Supported Databases              -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.37</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.2.0</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                       Database Dependencies                            -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>8.0.32</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                              Hibernate                                 -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.3.10.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.1-GA</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                              NGN Web CDX Util                          -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>gov.epa.webcdx</groupId>
+            <artifactId>ngn-webcdx-II-utils-spring3</artifactId>
+            <version>${ngn.webcdx.version}</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                              CROMERR                                   -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>gov.epa.cromerr</groupId>
+            <artifactId>cromerr-core-model</artifactId>
+            <version>${cromerr.version}</version>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>jasypt-hibernate3</artifactId>
+            		<groupId>org.jasypt</groupId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.cromerr</groupId>
+            <artifactId>cromerr-core-config</artifactId>
+            <version>${cromerr.version}</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                               NGN                                      -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-core-logic</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-core-config</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-actions-config</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-actions-client</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-enws20-client</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.epa.ngn</groupId>
+            <artifactId>ngn-enws20-config</artifactId>
+            <version>${ngn.version}</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                             logging                                    -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                                   Stripes                              -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>net.sourceforge.stripes</groupId>
+            <artifactId>stripes</artifactId>
+            <version>1.5.7</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>displaytag</groupId>
+            <artifactId>displaytag</artifactId>
+            <version>1.2</version>
+		    <exclusions>
+				<exclusion>
+				   <groupId>org.slf4j</groupId>
+				   <artifactId>jcl104-over-slf4j</artifactId>
+				</exclusion>
+	 	    </exclusions>	            
+        </dependency>
+        <dependency>
+            <groupId>displaytag</groupId>
+            <artifactId>displaytag-export-poi</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <!--needed for pdf export-->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>string</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <!-- ======================================================================  -->
+        <!--                              JSON Support                               -->
+        <!-- ======================================================================  -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <!-- ======================================================================  -->
+        <!--                                  Dozer                                  -->
+        <!-- ======================================================================  -->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                               Velocity                                 -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-tools</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                          Apache Commons                                -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!-- groovy -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.8.7</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                              Test Only                                 -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.unitils</groupId>
+            <artifactId>unitils-core</artifactId>
+            <version>3.4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.174</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                       Spring  Security                                 -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                            Jersey                                      -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <!--using spring integration-->
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-spring3</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!--bean validation -->
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-bean-validation</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-multipart</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>		
+        <!-- ====================================================================== -->
+        <!--                              Jasypt                                    -->
+        <!-- ====================================================================== -->
+        <dependency>
+            <groupId>gov.epa.cdx.jasypt.passphrase</groupId>
+            <artifactId>cdx-jasypt-passphrase</artifactId>
+            <version>${jasypt.version}</version>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>jasypt-hibernate3</artifactId>
+            		<groupId>org.jasypt</groupId>
+            	</exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+        	<artifactId>jasypt-hibernate4</artifactId>
+            <groupId>org.jasypt</groupId>
+        	<version>1.9.2</version>
+        </dependency>
+        <!-- ====================================================================== -->
+        <!--                          CSV Processing                                -->
+        <!-- ====================================================================== -->
+        <dependency>
+			<groupId>net.sf.supercsv</groupId>
+			<artifactId>super-csv</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+    </dependencies>
+    <build>
+        <finalName>cdx-ods</finalName>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.4</version>
+            </extension>
+        </extensions>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <executions>
+                        <execution>
+                            <id>bin</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <descriptors>
+                                    <descriptor>src/assembly/bin.xml</descriptor>
+                                </descriptors>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.3</version>
+                    <executions>
+                        <execution>
+                            <id>deploy-war</id>
+                            <phase>install</phase>
+                            <configuration>
+                                <tasks>
+                                    <copy todir="${deploy.dir}" failonerror="false">
+                                        <fileset dir="${project.build.directory}">
+                                            <include name="*.war" />
+                                        </fileset>
+                                    </copy>
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <delimiters>
+                            <delimiter>@</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <jdkName>1.7</jdkName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!-- ================================================================== -->
+            <!--                  Dependency for the Backend                        -->
+            <!-- ================================================================== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>model</classifier>
+                            <includes>
+                                <include>**/model/**</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.15.v20140411</version>
+                <configuration>
+                    <stopKey>STOP</stopKey>
+                    <stopPort>9999</stopPort>
+                    <scanIntervalSeconds>5</scanIntervalSeconds>
+                    <webApp>
+                        <contextPath>/cdx-ods</contextPath>
+                        <descriptor>${project.basedir}/src/test/resources/web-mock.xml</descriptor>
+                    </webApp>
+                    <webAppXml>${project.basedir}/src/test/resources/jetty.xml</webAppXml>
+                    <useTestScope>true</useTestScope>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>log.home</name>
+                            <value>${project.build.directory}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>spring.config.dir</name>
+                            <value>${project.basedir}/src/test/resources/conf</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>ngn.rmi.port</name>
+                            <value>1199</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <name>jetty.port</name>
+                            <value>8080</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+            <!-- ====================================================================== -->
+            <!-- groovy plugin, for compiling groovy code -->
+            <!-- ====================================================================== -->
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.3</version>
+                <configuration>
+                    <!-- this needs to reflect version of groovy dependency (1.7.8) -->
+                    <providerSelection>1.7</providerSelection>
+                </configuration>
+                <dependencies>
+                    <!-- also needs to reflect specific groovy dependency (1.7.8) -->
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-1.7</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                    <!-- this has to be included, otherwise it uses a different version -->
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>1.8.7</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>            
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>1.0-m5.1</version>
+                <configuration>
+                    <!-- update modules if you have them -->
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <!-- preserve the release branch at the end of the release -->
+                    <keepBranch>true</keepBranch>
+                    <!-- push the branch changes back to Stash -->
+                    <pushReleases>true</pushReleases>
+                    <!-- uncomment this if you don't want to automatically merge during release -->
+                    <!-- <noReleaseMerge>true</noReleaseMerge> -->
+                    <flowInitContext>
+                        <masterBranchName>master</masterBranchName>
+                        <developBranchName>develop</developBranchName>
+                        <featureBranchPrefix>feature/</featureBranchPrefix>
+                        <releaseBranchPrefix>release/</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                        <!-- e.g. tag of release-1.0.0 -->
+                        <versionTagPrefix>release-</versionTagPrefix>
+                    </flowInitContext>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+		<profile>
+			<id>developer</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<configuration>
+							<webXml>${basedir}/src/test/resources/web-mock.xml</webXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
